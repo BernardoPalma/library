@@ -1,6 +1,5 @@
 package bftsmart.demo.monitoringsystem.sensor.client;
 
-
 import bftsmart.demo.monitoringsystem.message.MetricMessage;
 import bftsmart.demo.monitoringsystem.message.SignedMessage;
 import bftsmart.demo.monitoringsystem.replica.StatisticDefaultRecoverable;
@@ -11,7 +10,7 @@ import bftsmart.tom.ServiceProxy;
 import java.math.BigDecimal;
 import java.security.PrivateKey;
 
-public class ThroughputSensor implements Runnable {
+public class ActiveClientsSensor implements Runnable{
 
     StatisticDefaultRecoverable replica;
     Integer seqN;
@@ -21,23 +20,22 @@ public class ThroughputSensor implements Runnable {
     PrivateKey privateKey;
     ServiceProxy sProxy;
 
-    public ThroughputSensor(StatisticDefaultRecoverable replica, int processId){
+    public ActiveClientsSensor(StatisticDefaultRecoverable replica, int processId){
         this.replica = replica;
         this.seqN = 0;
         this.processId = processId;
         this.sensorId = replica.getReplica().getId();
-        this.type = "Throughput";
+        this.type = "ActiveClients";
         this.privateKey = SecurityUtils.getPrivateKey("sensors/"+ type +"/keys/private" + sensorId + ".der");
         sProxy = new ServiceProxy(processId, "monitor-config");
     }
 
     public void run() {
 
-        BigDecimal result = new BigDecimal(replica.getThroughput());
-        replica.resetThroughput();
+        BigDecimal result = new BigDecimal(replica.getActiveClients());
 
-        MetricMessage thrput = new MetricMessage(seqN, sensorId, type, result);
-        SignedMessage message = new SignedMessage(thrput, privateKey);
+        MetricMessage actcli = new MetricMessage(seqN, sensorId, type, result);
+        SignedMessage message = new SignedMessage(actcli, privateKey);
 
         sProxy.invokeOrdered(SerializableUtil.serialize(message));
 
