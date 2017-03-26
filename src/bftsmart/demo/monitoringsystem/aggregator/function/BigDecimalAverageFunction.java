@@ -6,7 +6,11 @@ public class BigDecimalAverageFunction implements AggregationFunction{
     @Override
     public Object execute(Object[] input) {
 
-        BigDecimal[] in = (BigDecimal[]) input;
+        BigDecimal[] in = new BigDecimal[input.length];
+
+        for(int x = 0; x < input.length; x++){
+            in[x] = (BigDecimal) input[x];
+        }
 
         BigDecimal result = new BigDecimal(0);
 

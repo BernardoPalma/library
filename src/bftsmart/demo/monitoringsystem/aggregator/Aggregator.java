@@ -67,13 +67,14 @@ public class Aggregator {
 
         if(reachedQuorum(timeframe, sensor.getQuorumNeeded())) {
             if(sensor.getAggrFunc() != null) {
-                System.out.println("[Aggregator] Reached Consensus for type: " + message.getType() + ". Obtained value: " + sensor.getAggrFunc().execute(timeframe.values().toArray()));
+                System.out.println("[Aggregator] Reached Consensus for type: " + message.getType() + ". Obtained value: " + sensor.getAggrFunc().execute(timeframe.values().toArray()).toString());
+            } else {
+                System.out.println("[Aggregator] Reached Consensus for type: " + message.getType() + ". Obtained value: " + timeframe.values().toArray().toString());
             }
+            return true;
         } else {
             return false;
         }
-
-        return reachedQuorum(timeframe, sensor.getQuorumNeeded());
     }
 
     public void addNewSensor(Sensor sensor) {

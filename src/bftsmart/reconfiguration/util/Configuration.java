@@ -226,4 +226,8 @@ public class Configuration {
             e.printStackTrace(System.out);
         }
     }
+
+    public final String getConfigHome(){
+        return configHome;
+    }
 }

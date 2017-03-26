@@ -49,7 +49,7 @@ public class ViewController {
             try {
                 this.viewStore = (ViewStorage) Class.forName(className).newInstance();
             } catch (Exception e) {
-                this.viewStore = new DefaultViewStorage();
+                this.viewStore = new DefaultViewStorage(staticConf.getConfigHome());
             }
 
         }

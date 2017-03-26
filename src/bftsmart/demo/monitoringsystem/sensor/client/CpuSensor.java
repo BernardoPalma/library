@@ -11,6 +11,7 @@ import java.io.IOException;
 import com.sun.management.OperatingSystemMXBean;
 
 import java.lang.management.ManagementFactory;
+import java.math.BigDecimal;
 import java.security.PrivateKey;
 
 public class CpuSensor {
@@ -32,11 +33,13 @@ public class CpuSensor {
 
         OperatingSystemMXBean bean = (OperatingSystemMXBean) ManagementFactory.getOperatingSystemMXBean();
 
-        Double result = bean.getSystemCpuLoad();
+        Double warmup = bean.getSystemCpuLoad();
 
-        while(result < 0){
-            result = bean.getSystemCpuLoad();
+        while(warmup < 0){
+            warmup = bean.getSystemCpuLoad();
         }
+
+        BigDecimal result;
 
         while (true) {
 
@@ -46,7 +49,7 @@ public class CpuSensor {
                 e.printStackTrace();
             }
 
-            result = bean.getSystemCpuLoad() * 100;
+            result = new BigDecimal(bean.getSystemCpuLoad() * 100);
 
             System.out.println("SystemCPULoad: " + result);
 

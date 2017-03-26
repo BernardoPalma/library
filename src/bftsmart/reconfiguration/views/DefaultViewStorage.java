@@ -31,9 +31,9 @@ public class DefaultViewStorage implements ViewStorage {
 
     private String path = "";
 
-    public DefaultViewStorage() {
+    public DefaultViewStorage(String configHome) {
         String sep = System.getProperty("file.separator");
-        path = System.getProperty("user.dir") + sep + "config";
+        path = System.getProperty("user.dir") + sep + (configHome == null || "".equals(configHome) ? "config" : configHome);
         File f = new File(path);
         if (!f.exists()) {
             f.mkdirs();

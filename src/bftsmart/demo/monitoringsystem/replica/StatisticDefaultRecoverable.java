@@ -7,9 +7,7 @@ public abstract class StatisticDefaultRecoverable extends DefaultRecoverable{
     int throughput = 0;
     ServiceReplica replica;
 
-    public int getThroughput(){
-        return throughput;
-    }
+    public int getThroughput(){ return throughput; }
 
     public void resetThroughput(){
         throughput=0;

@@ -8,7 +8,7 @@ public class BigDecimalArrayAverageFunction implements AggregationFunction {
 
     @Override
     public Object execute(Object[] input) {
-        List<BigDecimal> result = new ArrayList<>();
+
 
         BigDecimal[][] in = new BigDecimal[input.length][];
 
@@ -16,13 +16,15 @@ public class BigDecimalArrayAverageFunction implements AggregationFunction {
             in[x] = (BigDecimal[]) input[x];
         }
 
+        BigDecimal[] result = new BigDecimal[in[0].length];
+
         for(int i = 0; i < in[0].length; i++){
             BigDecimal sum = new BigDecimal(0);
             for(int j = 0; j < in.length; j++){
                 if(in[j][i] != null)
                     sum.add(in[j][i]);
             }
-            result.add(i, sum.divide(new BigDecimal(in[0].length-1)));
+            result[i] = sum.divide(new BigDecimal(in[0].length-1));
         }
 
         return result;
