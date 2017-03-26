@@ -57,7 +57,7 @@ public class PingSensor {
                     int index = s.indexOf("time=");
                     time = s.substring(index + "time=".length());
                     String[] split = time.split("ms");
-                    time = split[0];
+                    time = split[0].trim();
 
                     System.out.println(time);
 
