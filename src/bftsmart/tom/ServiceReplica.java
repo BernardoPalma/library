@@ -522,7 +522,7 @@ public class ServiceReplica {
         return id;
     }
 
-    public Integer getActiveClients(){
+    public int getActiveClients(){
         return cs.getActiveClients();
     }
 }

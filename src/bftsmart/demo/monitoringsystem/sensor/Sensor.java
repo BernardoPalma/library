@@ -1,6 +1,6 @@
 package bftsmart.demo.monitoringsystem.sensor;
 
-import bftsmart.demo.monitoringsystem.aggregator.AggregationFunction;
+import bftsmart.demo.monitoringsystem.aggregator.function.AggregationFunction;
 
 import java.security.PublicKey;
 import java.util.List;

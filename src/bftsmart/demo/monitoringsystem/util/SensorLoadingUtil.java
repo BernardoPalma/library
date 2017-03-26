@@ -1,19 +1,14 @@
 package bftsmart.demo.monitoringsystem.util;
 
-import bftsmart.demo.monitoringsystem.aggregator.AggregationFunction;
+import bftsmart.demo.monitoringsystem.aggregator.function.AggregationFunction;
 import bftsmart.demo.monitoringsystem.sensor.Sensor;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.FileFilter;
 import java.io.FileReader;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.security.PublicKey;
 import java.util.*;
 import java.util.regex.Pattern;
-import java.util.stream.Stream;
 
 public class SensorLoadingUtil {
 

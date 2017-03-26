@@ -1,5 +1,6 @@
 package bftsmart.demo.monitoringsystem.aggregator;
 
+import bftsmart.demo.monitoringsystem.aggregator.function.AggregationFunction;
 import bftsmart.demo.monitoringsystem.message.MetricMessage;
 import bftsmart.demo.monitoringsystem.message.SignedMessage;
 import bftsmart.demo.monitoringsystem.sensor.Sensor;
@@ -38,6 +39,11 @@ public class Aggregator {
             return false;
         }
 
+        if(!sensor.getAggrFunc().validate(message.getMetric())){
+            System.out.println("[Aggregator] Incorrect metric value type");
+            return false;
+        }
+
         Map<Integer, Map<Integer, Object>> timeFrames = map.get(message.getType());
         if (timeFrames == null) {
             System.out.println("[Aggregator] Type still not initialized. Creating type " + message.getType());
@@ -60,7 +66,9 @@ public class Aggregator {
         timeframe.put(message.getSensorId(), message.getMetric());
 
         if(reachedQuorum(timeframe, sensor.getQuorumNeeded())) {
-
+            if(sensor.getAggrFunc() != null) {
+                System.out.println("[Aggregator] Reached Consensus for type: " + message.getType() + ". Obtained value: " + sensor.getAggrFunc().execute(timeframe.values().toArray()));
+            }
         } else {
             return false;
         }
@@ -72,7 +80,7 @@ public class Aggregator {
         if (!sensors.containsKey(sensor.getSensorType())) {
             sensors.put(sensor.getSensorType(), sensor);
         } else {
-            System.out.println("[aggregator] Sensor with the same type already exists.");
+            System.out.println("[Aggregator] Sensor with the same type already exists.");
             return;
         }
     }
@@ -87,7 +95,7 @@ public class Aggregator {
         if (sensor != null) {
             sensor.setAggrFunc(func);
         } else {
-            System.out.println("[aggregator] Sensor does not exist.");
+            System.out.println("[Aggregator] Sensor does not exist.");
         }
     }
 

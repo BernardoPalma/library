@@ -1,4 +1,4 @@
-package bftsmart.demo.monitoringsystem.aggregator;
+package bftsmart.demo.monitoringsystem.aggregator.function;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,5 +27,10 @@ public class DoubleArrayAverageFunction implements AggregationFunction{
         }
 
         return result;
+    }
+
+    @Override
+    public Boolean validate(Object input) {
+        return input instanceof Double[];
     }
 }

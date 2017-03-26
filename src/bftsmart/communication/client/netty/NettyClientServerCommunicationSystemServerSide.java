@@ -157,7 +157,7 @@ public class NettyClientServerCommunicationSystemServerSide extends SimpleChanne
             java.util.logging.Logger.getLogger(NettyClientServerCommunicationSystemServerSide.class.getName()).log(Level.INFO, "NettyClientServerCommunicationSystemServerSide is halting.");
 
         }
-        
+
 	@Override
 	public void exceptionCaught(ChannelHandlerContext ctx, Throwable cause){
 		
@@ -334,6 +334,11 @@ public class NettyClientServerCommunicationSystemServerSide extends SimpleChanne
 				rl.readLock().unlock();
 			}
 		}
+	}
+
+	@Override
+	public int getActiveClients() {
+		return sessionTable.size();
 	}
 
 }

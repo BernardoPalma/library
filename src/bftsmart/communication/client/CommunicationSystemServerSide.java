@@ -26,5 +26,5 @@ public interface CommunicationSystemServerSide {
    public void send(int[] targets, TOMMessage sm, boolean serializeClassHeaders);
    public void setRequestReceiver(RequestReceiver requestReceiver);
    public void shutdown();
-   public Integer getActiveClients();
+   public int getActiveClients();
 }

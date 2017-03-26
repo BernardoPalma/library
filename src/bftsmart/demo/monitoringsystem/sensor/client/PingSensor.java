@@ -7,6 +7,7 @@ import bftsmart.demo.monitoringsystem.util.SerializableUtil;
 import bftsmart.tom.ServiceProxy;
 
 import java.io.*;
+import java.math.BigDecimal;
 import java.security.PrivateKey;
 
 public class PingSensor {
@@ -34,7 +35,7 @@ public class PingSensor {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            Double[] result = new Double[hosts.length];
+            BigDecimal[] result = new BigDecimal[hosts.length];
 
             for (int i = 0; i < hosts.length; i++) {
                 if (i == sensorId) {
@@ -66,7 +67,7 @@ public class PingSensor {
                 if (time.equals("-1")) {
                     result[i] = null;
                 } else {
-                    result[i] = Double.parseDouble(time);
+                    result[i] = new BigDecimal(time);
                 }
 
             }

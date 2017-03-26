@@ -168,7 +168,7 @@ public class ServerCommunicationSystem extends Thread {
         serversConn.shutdown();
     }
 
-    public Integer getActiveClients(){
+    public int getActiveClients(){
         return clientsConn.getActiveClients();
     }
 }
