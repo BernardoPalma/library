@@ -1,5 +1,6 @@
 package bftsmart.demo.monitoringsystem.replica;
 
+import bftsmart.demo.monitoringsystem.sensor.client.ActiveClientsSensor;
 import bftsmart.demo.monitoringsystem.sensor.client.ThroughputSensor;
 import bftsmart.tom.MessageContext;
 import bftsmart.tom.ServiceReplica;
@@ -82,7 +83,8 @@ public class CounterServerWithStatistics extends StatisticDefaultRecoverable {
         }
         CounterServerWithStatistics cs = new CounterServerWithStatistics(Integer.parseInt(args[0]));
         final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
-        scheduler.scheduleAtFixedRate(new ThroughputSensor(cs, 1001, 1), 30, 1, TimeUnit.SECONDS);
+        //scheduler.scheduleAtFixedRate(new ThroughputSensor(cs, 1001, 1), 30, 1, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new ActiveClientsSensor(cs, 1001), 30, 1, TimeUnit.SECONDS);
     }
 
 

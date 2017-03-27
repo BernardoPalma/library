@@ -23,11 +23,11 @@ public class ActiveClientsSensor implements Runnable{
     public ActiveClientsSensor(StatisticDefaultRecoverable replica, int processId){
         this.replica = replica;
         this.seqN = 0;
-        this.processId = processId;
         this.sensorId = replica.getReplica().getId();
+        this.processId = processId + sensorId;
         this.type = "ActiveClients";
         this.privateKey = SecurityUtils.getPrivateKey("sensors/"+ type +"/keys/private" + sensorId + ".der");
-        sProxy = new ServiceProxy(processId, "monitor-config");
+        sProxy = new ServiceProxy(this.processId, "monitor-config");
     }
 
     public void run() {
