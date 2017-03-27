@@ -16,7 +16,7 @@ public class SensorLoadingUtil {
 
     public static Map<String, Sensor> loadSensors(){
 
-        sensors = new HashMap<>();
+        sensors = new TreeMap<>();
         File configHome = new File("sensors");
 
         if(configHome.exists() && configHome.isDirectory()){

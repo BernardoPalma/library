@@ -10,14 +10,14 @@ import bftsmart.demo.monitoringsystem.util.SerializableUtil;
 import java.util.*;
 
 public class Aggregator {
+    
+    //TODO create new semantic, MetricMessage uses BigDecimal, EventMessage uses String.
 
     private Map<String, Sensor> sensors;
 
     private Map<String, Map<Integer, Map<Integer, Object>>> map = new TreeMap<>();
 
-    public Aggregator() {
-        this.sensors = new HashMap<>();
-    }
+    public Aggregator() { this.sensors = new TreeMap<>(); }
 
     public Aggregator(Map<String, Sensor> sensors) {
         this.sensors = sensors;
@@ -47,14 +47,14 @@ public class Aggregator {
         Map<Integer, Map<Integer, Object>> timeFrames = map.get(message.getType());
         if (timeFrames == null) {
             System.out.println("[Aggregator] Type still not initialized. Creating type " + message.getType());
-            timeFrames = new HashMap<>();
+            timeFrames = new TreeMap<>();
             map.put(message.getType(), timeFrames);
         }
 
         Map<Integer, Object> timeframe = timeFrames.get(message.getSeqN());
         if (timeframe == null) {
             System.out.println("[Aggregator] New timeframe received. Creating timeframe with sequence number: " + message.getSeqN());
-            timeframe = new HashMap<>();
+            timeframe = new TreeMap<>();
             timeFrames.put(message.getSeqN(), timeframe);
         }
 
