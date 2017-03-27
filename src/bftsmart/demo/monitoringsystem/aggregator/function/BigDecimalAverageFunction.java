@@ -15,7 +15,7 @@ public class BigDecimalAverageFunction implements AggregationFunction{
         BigDecimal result = new BigDecimal(0);
 
         for(BigDecimal v : in){
-            result.add(v);
+            result = result.add(v);
         }
 
         return result.divide(new BigDecimal(in.length));

@@ -22,7 +22,7 @@ public class BigDecimalArrayAverageFunction implements AggregationFunction {
             BigDecimal sum = new BigDecimal(0);
             for(int j = 0; j < in.length; j++){
                 if(in[j][i] != null)
-                    sum.add(in[j][i]);
+                    sum = sum.add(in[j][i]);
             }
             result[i] = sum.divide(new BigDecimal(in[0].length-1));
         }

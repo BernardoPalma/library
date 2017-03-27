@@ -27,22 +27,21 @@ public class ThroughputSensor implements Runnable {
         this.seqN = 0;
         this.sensorId = replica.getReplica().getId();
 
-        System.out.println("ADFGSDFGSDFGSDFGSDFGSDFGSDG" + sensorId);
-
         this.processId = processId + sensorId;
         this.rate = rate;
         this.type = "Throughput";
         this.privateKey = SecurityUtils.getPrivateKey("sensors/"+ type +"/keys/private" + sensorId + ".der");
-        sProxy = new ServiceProxy(processId, "monitor-config");
+        sProxy = new ServiceProxy(this.processId, "monitor-config");
     }
 
     public void run() {
 
-        System.out.println("Throughput: " + replica.getThroughput());
         BigDecimal result = new BigDecimal(replica.getThroughput());
+        System.out.println("BIG DECIMAL: " + result);
         replica.resetThroughput();
+        System.out.println("Throughput: " + replica.getThroughput());
 
-        MetricMessage thrput = new MetricMessage(seqN, sensorId, type, (result.compareTo(new BigDecimal(0)) == 0 ? result : result.divide(new BigDecimal(rate))));
+        MetricMessage thrput = new MetricMessage(seqN, sensorId, type, result.divide(new BigDecimal(rate)));
         SignedMessage message = new SignedMessage(thrput, privateKey);
 
         sProxy.invokeOrdered(SerializableUtil.serialize(message));
