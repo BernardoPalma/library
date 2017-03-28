@@ -1,13 +1,24 @@
 package bftsmart.demo.monitoringsystem.replica;
 
+import bftsmart.demo.monitoringsystem.sensor.client.ActiveClientsSensor;
 import bftsmart.tom.ServiceReplica;
 import bftsmart.tom.server.defaultservices.DefaultRecoverable;
+
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.TimeUnit;
 
 public abstract class StatisticDefaultRecoverable extends DefaultRecoverable{
     int throughput = 0;
     ServiceReplica replica;
 
-    public int getThroughput(){ return throughput; }
+    public void initStatistics() {
+        final ScheduledExecutorService scheduler = Executors.newScheduledThreadPool(1);
+        //scheduler.scheduleAtFixedRate(new ThroughputSensor(cs, 1001, 1), 30, 1, TimeUnit.SECONDS);
+        scheduler.scheduleAtFixedRate(new ActiveClientsSensor(this, 1001), 30, 1, TimeUnit.SECONDS);
+    }
+
+    public int getThroughput() { return throughput; }
 
     public void resetThroughput(){
         throughput=0;

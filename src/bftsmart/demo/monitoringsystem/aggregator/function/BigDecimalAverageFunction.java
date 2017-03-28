@@ -1,6 +1,7 @@
 package bftsmart.demo.monitoringsystem.aggregator.function;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 
 public class BigDecimalAverageFunction implements AggregationFunction{
     @Override
@@ -18,7 +19,7 @@ public class BigDecimalAverageFunction implements AggregationFunction{
             result = result.add(v);
         }
 
-        return result.divide(new BigDecimal(in.length));
+        return result.divide(new BigDecimal(in.length), RoundingMode.FLOOR);
     }
 
     @Override
