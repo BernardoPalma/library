@@ -23,58 +23,57 @@ public class Aggregator {
         this.sensors = sensors;
     }
 
-    public boolean receiveMetric(SignedMessage signedMessage) {
+    public Object receiveMetric(SignedMessage signedMessage) {
         MetricMessage message = signedMessage.getMessage();
         Sensor sensor = sensors.get(message.getType());
 
         if (sensor == null) {
             System.out.println("[Aggregator] Unrecognizable type");
-            return false;
+            return null;
         }
 
         //TODO maybe verify correct serialization of message
 
         if (!SecurityUtils.verifySignature(SerializableUtil.serialize(message), signedMessage.getSignature(), sensor.getPublicKey(message.getSensorId()))) {
             System.out.println("[Aggregator] Invalid Signature");
-            return false;
+            return null;
         }
 
         if(!sensor.getAggrFunc().validate(message.getMetric())){
             System.out.println("[Aggregator] Incorrect metric value type");
-            return false;
+            return null;
         }
 
         Map<Integer, Map<Integer, Object>> timeFrames = map.get(message.getType());
         if (timeFrames == null) {
-            System.out.println("[Aggregator] Type still not initialized. Creating type " + message.getType());
+            //System.out.println("[Aggregator] Type still not initialized. Creating type " + message.getType());
             timeFrames = new TreeMap<>();
             map.put(message.getType(), timeFrames);
         }
 
         Map<Integer, Object> timeframe = timeFrames.get(message.getSeqN());
         if (timeframe == null) {
-            System.out.println("[Aggregator] New timeframe received. Creating timeframe with sequence number: " + message.getSeqN());
+            //System.out.println("[Aggregator] New timeframe received. Creating timeframe with sequence number: " + message.getSeqN());
             timeframe = new TreeMap<>();
             timeFrames.put(message.getSeqN(), timeframe);
         }
 
         if (timeframe.get(message.getSensorId()) != null) {
             System.out.println("[Aggregator] Duplicate Message");
-            return false;
+            return null;
         }
 
         timeframe.put(message.getSensorId(), message.getMetric());
 
         if(reachedQuorum(timeframe, sensor.getQuorumNeeded())) {
-            if(sensor.getAggrFunc() != null) {
-                System.out.println("[Aggregator] Reached Consensus for type: " + message.getType() + ". Obtained value: " + sensor.getAggrFunc().execute(timeframe.values().toArray()).toString());
+            //System.out.println("[Aggregator] Reached Consensus for type: " + message.getType());
+            if (sensor.getAggrFunc() != null) {
+                return sensor.getAggrFunc().execute(timeframe.values().toArray());
             } else {
-                System.out.println("[Aggregator] Reached Consensus for type: " + message.getType() + ". Obtained value: " + timeframe.values().toArray().toString());
+                return timeframe.values().toArray()[0];
             }
-            return true;
-        } else {
-            return false;
         }
+        return null;
     }
 
     public void addNewSensor(Sensor sensor) {

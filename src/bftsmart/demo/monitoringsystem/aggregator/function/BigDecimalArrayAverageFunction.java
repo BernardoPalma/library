@@ -1,6 +1,7 @@
 package bftsmart.demo.monitoringsystem.aggregator.function;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -24,7 +25,7 @@ public class BigDecimalArrayAverageFunction implements AggregationFunction {
                 if(in[j][i] != null)
                     sum = sum.add(in[j][i]);
             }
-            result[i] = sum.divide(new BigDecimal(in[0].length-1));
+            result[i] = sum.divide(new BigDecimal(in[0].length-1),2, RoundingMode.FLOOR);
         }
 
         return result;

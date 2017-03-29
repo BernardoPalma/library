@@ -59,7 +59,10 @@ public class MonitorServer extends DefaultRecoverable {
         if(o instanceof SignedMessage) {
             SignedMessage sm = (SignedMessage) o;
             if(sm.getMessage() instanceof MetricMessage){
-                aggregator.receiveMetric(sm);
+                Object value = aggregator.receiveMetric(sm);
+                if(value != null){
+                    handleDecidedValue(sm.getMessage().getType(), value);
+                }
             }
         }
 
@@ -69,5 +72,9 @@ public class MonitorServer extends DefaultRecoverable {
     @Override
     public byte[] appExecuteUnordered(byte[] command, MessageContext msgCtx) {
         return new byte[0];
+    }
+
+    private void handleDecidedValue(String type, Object value){
+        System.out.println("Decided value for type: " + type + ". Obtained: " + value.toString());
     }
 }

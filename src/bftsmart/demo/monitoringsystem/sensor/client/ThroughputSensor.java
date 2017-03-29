@@ -9,6 +9,7 @@ import bftsmart.demo.monitoringsystem.util.SerializableUtil;
 import bftsmart.tom.ServiceProxy;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.security.PrivateKey;
 
 public class ThroughputSensor implements Runnable {
@@ -37,11 +38,9 @@ public class ThroughputSensor implements Runnable {
     public void run() {
 
         BigDecimal result = new BigDecimal(replica.getThroughput());
-        System.out.println("BIG DECIMAL: " + result);
         replica.resetThroughput();
-        System.out.println("Throughput: " + replica.getThroughput());
 
-        MetricMessage thrput = new MetricMessage(seqN, sensorId, type, result.divide(new BigDecimal(rate)));
+        MetricMessage thrput = new MetricMessage(seqN, sensorId, type, result.divide(new BigDecimal(rate), RoundingMode.FLOOR));
         SignedMessage message = new SignedMessage(thrput, privateKey);
 
         sProxy.invokeOrdered(SerializableUtil.serialize(message));
