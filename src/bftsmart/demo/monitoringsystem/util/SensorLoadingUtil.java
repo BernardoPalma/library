@@ -47,7 +47,7 @@ public class SensorLoadingUtil {
                     String configFile = path + "/sensor.config";
                     Sensor s = parseConfig(configFile, publicKeys);
                     if (s != null) {
-                        sensors.put(s.getSensorType(), s);
+                        sensors.put(s.getIdentifier(), s);
                     }
                 }
             }
@@ -59,6 +59,7 @@ public class SensorLoadingUtil {
 
     private static Sensor parseConfig(String configFile, List<PublicKey> publicKeys){
 
+        String identifier = null;
         String type = null;
         Integer quorum = null;
         AggregationFunction aggr = null;
@@ -70,6 +71,9 @@ public class SensorLoadingUtil {
                     StringTokenizer str = new StringTokenizer(line,"=");
                     if(str.countTokens() > 1){
                         switch (str.nextToken().trim()){
+                            case "identifier":
+                                identifier=str.nextToken().trim();
+                                break;
                             case "type":
                                 type = str.nextToken().trim();
                                 break;
@@ -90,8 +94,8 @@ public class SensorLoadingUtil {
                 }
             }
 
-            if (type != null && quorum != null) {
-                return new Sensor(type, quorum, publicKeys, aggr);
+            if (identifier != null && type != null && quorum != null) {
+                return new Sensor(identifier, type, quorum, publicKeys, aggr);
             }
         } catch (Exception e) {
             e.printStackTrace();

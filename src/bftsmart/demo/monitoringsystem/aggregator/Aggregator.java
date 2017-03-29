@@ -78,20 +78,20 @@ public class Aggregator {
     }
 
     public void addNewSensor(Sensor sensor) {
-        if (!sensors.containsKey(sensor.getSensorType())) {
-            sensors.put(sensor.getSensorType(), sensor);
+        if (!sensors.containsKey(sensor.getIdentifier())) {
+            sensors.put(sensor.getIdentifier(), sensor);
         } else {
-            System.out.println("[Aggregator] Sensor with the same type already exists.");
+            System.out.println("[Aggregator] Sensor with the same identifier already exists.");
             return;
         }
     }
 
-    public void removeSensor(String sensorType) {
-        sensors.remove(sensorType);
+    public void removeSensor(String identifier) {
+        sensors.remove(identifier);
     }
 
-    public void changeAggregationFunction(String sensorType, AggregationFunction func) {
-        Sensor sensor = sensors.get(sensorType);
+    public void changeAggregationFunction(String identifier, AggregationFunction func) {
+        Sensor sensor = sensors.get(identifier);
 
         if (sensor != null) {
             sensor.setAggrFunc(func);

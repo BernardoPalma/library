@@ -7,19 +7,23 @@ import java.util.List;
 
 public class Sensor {
 
-    private final String sensorType;
+    private final String identifier;
+    private String sensorType;
     private Integer quorumNeeded;
     private List<PublicKey> publicKeys;
     private AggregationFunction aggrFunc;
 
-    public Sensor(String sensorType, Integer quorumNeeded, List<PublicKey> publicKeys, AggregationFunction aggregationFunction) {
+    public Sensor(String identifier, String sensorType, Integer quorumNeeded, List<PublicKey> publicKeys, AggregationFunction aggregationFunction) {
 
+        this.identifier = identifier;
         this.sensorType = sensorType;
         this.quorumNeeded = quorumNeeded;
         this.publicKeys = publicKeys;
         this.aggrFunc = aggregationFunction;
 
     }
+
+    public String getIdentifier() { return identifier; }
 
     public String getSensorType() {
         return sensorType;
