@@ -4,6 +4,8 @@ import bftsmart.demo.monitoringsystem.aggregator.Aggregator;
 import bftsmart.demo.monitoringsystem.message.MetricMessage;
 import bftsmart.demo.monitoringsystem.message.SignedMessage;
 import bftsmart.demo.monitoringsystem.sensor.Sensor;
+import bftsmart.demo.monitoringsystem.storage.DecidedValue;
+import bftsmart.demo.monitoringsystem.storage.TSDatabase;
 import bftsmart.demo.monitoringsystem.util.SensorLoadingUtil;
 import bftsmart.demo.monitoringsystem.util.SerializableUtil;
 import bftsmart.tom.MessageContext;
@@ -17,10 +19,13 @@ public class MonitorServer extends DefaultRecoverable {
 
     ServiceReplica replica;
     private Aggregator aggregator;
+    private TSDatabase storage;
+    private int snapshotCounter = 0;
 
     public MonitorServer(int id){
         Map<String, Sensor> sensors = SensorLoadingUtil.loadSensors();
         aggregator = sensors != null ? new Aggregator(sensors) : new Aggregator();
+        storage = new TSDatabase();
         replica = new ServiceReplica(id, "monitor-config", this, this, null, new DefaultReplier());
     }
 
@@ -75,6 +80,8 @@ public class MonitorServer extends DefaultRecoverable {
     }
 
     private void handleDecidedValue(String type, Object value){
-        System.out.println("Decided value for type: " + type + ". Obtained: " + value.toString());
+        snapshotCounter++;
+        System.out.println("Decided value in snapshot " + snapshotCounter + " for type: " + type + ". Obtained: " + value.toString());
+        storage.insertValue(type, snapshotCounter, new DecidedValue(type, value));
     }
 }
