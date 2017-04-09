@@ -1,16 +1,17 @@
 package bftsmart.demo.monitoringsystem.message;
 
 import java.io.Serializable;
+import java.math.BigDecimal;
 
-public class MetricMessage implements Serializable {
+public class MetricMessage extends SensorMessage<BigDecimal> {
 
     private final int seqN;
     private final int sensorId;
     private final String type;
-    private final Object metric;
+    private final BigDecimal metric;
 
 
-    public MetricMessage(int seqN, int sensorId, String type, Object metric) {
+    public MetricMessage(int seqN, int sensorId, String type, BigDecimal metric) {
         this.seqN = seqN;
         this.sensorId = sensorId;
         this.type = type;
@@ -29,7 +30,7 @@ public class MetricMessage implements Serializable {
         return type;
     }
 
-    public Object getMetric() {
+    public BigDecimal getContent() {
         return metric;
     }
 

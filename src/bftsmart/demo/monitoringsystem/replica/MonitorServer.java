@@ -1,7 +1,9 @@
 package bftsmart.demo.monitoringsystem.replica;
 
 import bftsmart.demo.monitoringsystem.aggregator.Aggregator;
+import bftsmart.demo.monitoringsystem.message.EventMessage;
 import bftsmart.demo.monitoringsystem.message.MetricMessage;
+import bftsmart.demo.monitoringsystem.message.SensorMessage;
 import bftsmart.demo.monitoringsystem.message.SignedMessage;
 import bftsmart.demo.monitoringsystem.sensor.Sensor;
 import bftsmart.demo.monitoringsystem.storage.DecidedValue;
@@ -20,12 +22,11 @@ public class MonitorServer extends DefaultRecoverable {
     ServiceReplica replica;
     private Aggregator aggregator;
     private TSDatabase storage;
-    private int snapshotCounter = 0;
 
     public MonitorServer(int id){
         Map<String, Sensor> sensors = SensorLoadingUtil.loadSensors();
         aggregator = sensors != null ? new Aggregator(sensors) : new Aggregator();
-        storage = new TSDatabase();
+        storage = new TSDatabase(1000);
         replica = new ServiceReplica(id, "monitor-config", this, this, null, new DefaultReplier());
     }
 
@@ -63,10 +64,15 @@ public class MonitorServer extends DefaultRecoverable {
         Object o = SerializableUtil.deserialize(command);
         if(o instanceof SignedMessage) {
             SignedMessage sm = (SignedMessage) o;
-            if(sm.getMessage() instanceof MetricMessage){
+            if(sm.getMessage() instanceof SensorMessage){
                 Object value = aggregator.receiveMetric(sm);
                 if(value != null){
-                    handleDecidedValue(sm.getMessage().getType(), value);
+                    if(sm.getMessage() instanceof MetricMessage){
+                        handleMetric(sm.getMessage().getType(), value);
+                    } else if(sm.getMessage() instanceof EventMessage){
+                        handleEvent(sm.getMessage().getType(), value);
+                    }
+
                 }
             }
         }
@@ -79,9 +85,12 @@ public class MonitorServer extends DefaultRecoverable {
         return new byte[0];
     }
 
-    private void handleDecidedValue(String type, Object value){
-        snapshotCounter++;
-        System.out.println("Decided value in snapshot " + snapshotCounter + " for type: " + type + ". Obtained: " + value.toString());
-        storage.insertValue(type, snapshotCounter, new DecidedValue(type, value));
+    private void handleMetric(String type, Object value){
+        System.out.println("Decided metric value for type: " + type + ". Obtained: " + value.toString());
+        storage.insertValue(type, 0, new DecidedValue(type, value));
+    }
+
+    private void handleEvent(String type, Object value){
+        System.out.println("Decided event for type: " + type + ". Obtained: " + value.toString());
     }
 }

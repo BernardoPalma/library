@@ -1,5 +1,6 @@
 package bftsmart.demo.monitoringsystem.message;
 
+import bftsmart.demo.monitoringsystem.sensor.Sensor;
 import bftsmart.demo.monitoringsystem.util.SecurityUtils;
 import bftsmart.demo.monitoringsystem.util.SerializableUtil;
 
@@ -8,10 +9,10 @@ import java.security.PrivateKey;
 
 public class SignedMessage implements Serializable {
 
-    private MetricMessage message;
+    private SensorMessage message;
     private byte[] signature;
 
-    public SignedMessage(MetricMessage message, PrivateKey privateKey) {
+    public SignedMessage(SensorMessage message, PrivateKey privateKey) {
 
         byte[] digest = SerializableUtil.serialize(message);
 
@@ -19,7 +20,7 @@ public class SignedMessage implements Serializable {
         this.signature = SecurityUtils.sign(digest, privateKey);
     }
 
-    public MetricMessage getMessage() {
+    public SensorMessage getMessage() {
         return message;
     }
 

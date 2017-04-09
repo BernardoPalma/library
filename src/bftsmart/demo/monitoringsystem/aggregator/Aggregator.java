@@ -10,8 +10,6 @@ import bftsmart.demo.monitoringsystem.util.SerializableUtil;
 import java.util.*;
 
 public class Aggregator {
-    
-    //TODO create new semantic, MetricMessage uses BigDecimal, EventMessage uses String.
 
     private Map<String, Sensor> sensors;
 
@@ -39,7 +37,7 @@ public class Aggregator {
             return null;
         }
 
-        if(!sensor.getAggrFunc().validate(message.getMetric())){
+        if(!sensor.getAggrFunc().validate(message.getContent())){
             System.out.println("[Aggregator] Incorrect metric value type");
             return null;
         }
@@ -63,7 +61,7 @@ public class Aggregator {
             return null;
         }
 
-        timeframe.put(message.getSensorId(), message.getMetric());
+        timeframe.put(message.getSensorId(), message.getContent());
 
         if(reachedQuorum(timeframe, sensor.getQuorumNeeded())) {
             //System.out.println("[Aggregator] Reached Consensus for type: " + message.getType());
