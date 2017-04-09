@@ -1,6 +1,7 @@
 package bftsmart.demo.monitoringsystem.sensor;
 
 import bftsmart.demo.monitoringsystem.aggregator.function.AggregationFunction;
+import com.yahoo.ycsb.generator.IntegerGenerator;
 
 import java.security.PublicKey;
 import java.util.List;
@@ -9,14 +10,16 @@ public class Sensor {
 
     private final String identifier;
     private String sensorType;
-    private Integer quorumNeeded;
+    private int faultsAllowed;
+    private int quorumNeeded;
     private List<PublicKey> publicKeys;
     private AggregationFunction aggrFunc;
 
-    public Sensor(String identifier, String sensorType, Integer quorumNeeded, List<PublicKey> publicKeys, AggregationFunction aggregationFunction) {
+    public Sensor(String identifier, String sensorType, int faultsAllowed, int quorumNeeded, List<PublicKey> publicKeys, AggregationFunction aggregationFunction) {
 
         this.identifier = identifier;
         this.sensorType = sensorType;
+        this.faultsAllowed = faultsAllowed;
         this.quorumNeeded = quorumNeeded;
         this.publicKeys = publicKeys;
         this.aggrFunc = aggregationFunction;
@@ -28,6 +31,10 @@ public class Sensor {
     public String getSensorType() {
         return sensorType;
     }
+
+    public Integer getFaultsAllowed() { return faultsAllowed; }
+
+    public void setFaultsAllowed(int faultsAllowed) { this.faultsAllowed = faultsAllowed; }
 
     public int getQuorumNeeded() {
         return quorumNeeded;

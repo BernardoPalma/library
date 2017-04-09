@@ -6,7 +6,7 @@ import java.util.List;
 public class DoubleArrayAverageFunction implements AggregationFunction{
 
     @Override
-    public Object execute(Object[] input) {
+    public Object execute(Object[] input, int f) {
 
         List<Double> result = new ArrayList<>();
 

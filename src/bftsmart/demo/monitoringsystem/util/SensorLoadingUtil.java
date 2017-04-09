@@ -61,6 +61,7 @@ public class SensorLoadingUtil {
 
         String identifier = null;
         String type = null;
+        Integer faults = null;
         Integer quorum = null;
         AggregationFunction aggr = null;
 
@@ -76,6 +77,9 @@ public class SensorLoadingUtil {
                                 break;
                             case "type":
                                 type = str.nextToken().trim();
+                                break;
+                            case "faults":
+                                faults = Integer.parseInt(str.nextToken().trim());
                                 break;
                             case "quorum":
                                 quorum = Integer.parseInt(str.nextToken().trim());
@@ -94,8 +98,8 @@ public class SensorLoadingUtil {
                 }
             }
 
-            if (identifier != null && type != null && quorum != null) {
-                return new Sensor(identifier, type, quorum, publicKeys, aggr);
+            if (identifier != null && type != null && faults!=null && quorum != null) {
+                return new Sensor(identifier, type, faults, quorum, publicKeys, aggr);
             }
         } catch (Exception e) {
             e.printStackTrace();

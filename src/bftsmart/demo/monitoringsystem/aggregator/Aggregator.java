@@ -1,7 +1,7 @@
 package bftsmart.demo.monitoringsystem.aggregator;
 
 import bftsmart.demo.monitoringsystem.aggregator.function.AggregationFunction;
-import bftsmart.demo.monitoringsystem.message.MetricMessage;
+import bftsmart.demo.monitoringsystem.message.SensorMessage;
 import bftsmart.demo.monitoringsystem.message.SignedMessage;
 import bftsmart.demo.monitoringsystem.sensor.Sensor;
 import bftsmart.demo.monitoringsystem.util.SecurityUtils;
@@ -22,7 +22,7 @@ public class Aggregator {
     }
 
     public Object receiveMetric(SignedMessage signedMessage) {
-        MetricMessage message = signedMessage.getMessage();
+        SensorMessage message = signedMessage.getMessage();
         Sensor sensor = sensors.get(message.getType());
 
         if (sensor == null) {
@@ -66,7 +66,7 @@ public class Aggregator {
         if(reachedQuorum(timeframe, sensor.getQuorumNeeded())) {
             //System.out.println("[Aggregator] Reached Consensus for type: " + message.getType());
             if (sensor.getAggrFunc() != null) {
-                return sensor.getAggrFunc().execute(timeframe.values().toArray());
+                return sensor.getAggrFunc().execute(timeframe.values().toArray(), sensor.getFaultsAllowed());
             } else {
                 return timeframe.values().toArray()[0];
             }

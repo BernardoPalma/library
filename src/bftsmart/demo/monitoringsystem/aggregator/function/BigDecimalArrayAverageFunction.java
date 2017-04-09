@@ -8,7 +8,7 @@ import java.util.List;
 public class BigDecimalArrayAverageFunction implements AggregationFunction {
 
     @Override
-    public Object execute(Object[] input) {
+    public Object execute(Object[] input, int f) {
 
 
         BigDecimal[][] in = new BigDecimal[input.length][];

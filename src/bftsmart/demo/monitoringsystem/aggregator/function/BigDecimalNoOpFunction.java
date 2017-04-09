@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 
 public class BigDecimalNoOpFunction implements AggregationFunction {
     @Override
-    public Object execute(Object[] input) {
+    public Object execute(Object[] input, int f) {
         return input[0];
     }
 

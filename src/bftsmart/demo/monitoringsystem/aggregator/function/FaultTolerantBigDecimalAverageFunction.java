@@ -2,8 +2,10 @@ package bftsmart.demo.monitoringsystem.aggregator.function;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
+import java.util.Arrays;
 
-public class BigDecimalAverageFunction implements AggregationFunction{
+public class FaultTolerantBigDecimalAverageFunction implements AggregationFunction{
+
     @Override
     public Object execute(Object[] input, int f) {
 
@@ -13,9 +15,12 @@ public class BigDecimalAverageFunction implements AggregationFunction{
             in[x] = (BigDecimal) input[x];
         }
 
+        Arrays.sort(in);
+        BigDecimal[] values = Arrays.copyOfRange(in, f, in.length - f);
+
         BigDecimal result = new BigDecimal(0);
 
-        for(BigDecimal v : in){
+        for(BigDecimal v : values){
             result = result.add(v);
         }
 
